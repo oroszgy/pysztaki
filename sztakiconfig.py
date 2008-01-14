@@ -47,4 +47,5 @@ form_data.update({
     u'P':               u"0",    # kiejtes nelkul
     u'T':               u"1",    # tablazatos megjelenites
     u'hallatlan_inc':   u"0",    # jelbeszed megjelenitese
+    u'in_pysztaki':     u"1",    # bejelezzuk, hogy a mi programunk generalt
 })
