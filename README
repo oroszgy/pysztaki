@@ -1,0 +1,46 @@
+PySztaki
+Konzolos fordito-script a sztaki adatbazis hasznalataval
+
+Egyszeru script, mely a parameterkent kapott szot megkeresi
+a szinten parameterkent kapott sztaki szotar-valtozatban a
+szotar.sztaki.hu-n, majd BeautifulSouppal benyalja az oldalt,
+es kiszedi a talalatokat. A script translate() fuggvenye vegzi
+a tenyleges forditast, konnyen felhasznalhato mas projectben is.
+
+Tovabbi informacio a project honlapjan:
+http://code.google.com/p/pysztaki/
+
+Copyright (c) 2008, Pek Daniel
+
+* Kovetelmenyek
+
+- Python interpreter, a 2.4 es 2.5 kornyezetekkel lett tesztelve.
+- A program futtatasahoz szukseges a BeautifulSoup python modul,
+  ami az alabbi cimen erheto el:
+  http://www.crummy.com/software/BeautifulSoup/
+
+A program felhasznalja tovabba az alabbi cimen talalhato ordered
+dict osztalyt:
+http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/107747
+
+Mivel a script meg meglehetosen friss, valoszinuleg tartalmaz
+meg hibakat. Mindenfele visszajelzest szivesen fogadok
+
+* Hasznalat:
+
+A script hasznalata roppant egyszeru:
+pysztaki.py [szotar-valtozat] <forditando szo>
+
+szotar-valtozatok:
+    enhu
+    huen
+    gehu
+    huge
+    frhu
+    hufr
+    ithu
+    huit
+    hohu
+    huho
+    pohu
+    hupo
