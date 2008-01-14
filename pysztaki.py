@@ -113,6 +113,7 @@ if __name__ == '__main__':
     encoding = locale.getpreferredencoding(True)
     if len(sys.argv) < 2:
         sys.stderr.write(u"Helytelen paraméterezés!\n".encode(encoding))
+        sys.exit(-1)
     
     # az elso parameter alapesetben a nyelv, a tobbi a szo
     args = sztakiutils.decode_list(sys.argv, encoding)
