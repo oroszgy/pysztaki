@@ -118,4 +118,3 @@ class odict(IterableUserDict):
 
     def values(self):
         return map(self.get, self._keys)
- 

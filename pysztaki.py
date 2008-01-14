@@ -47,7 +47,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import sztakiconfig
 import sys
 import urllib
-import utils
+import sztakiutils
 
 def print_results(results):
     import locale
@@ -65,15 +65,15 @@ def translate(form_data):
     """
     
     # parameterek rekombinalasa, eredmeny letoltese
-    params = urllib.urlencode(utils.encode_dict(form_data, "iso8859-2"))
+    params = urllib.urlencode(sztakiutils.encode_dict(form_data, "iso8859-2"))
     page = urllib.urlopen(sztakiconfig.base_url + "?%s" % params)
     
     # az eredmenyt benyaljuk beautifulsouppal
     # hasznalunk egy util-fuggvenyt, ami lenyeli a whitespace-eket
-    soup = utils.bs_preprocess(page)
+    soup = sztakiutils.bs_preprocess(page)
     
     # adatok kinyerese
-    result = utils.odict()
+    result = sztakiutils.odict()
     current_word = ""
     
     # eredmenytablak megkeresese, vegigiteralunk rajtuk
@@ -86,10 +86,10 @@ def translate(form_data):
             # az elso jelentest a tombjebe
             if result_row['id'][:4] == "main":
                 tds = result_row.findAll(name = "td")
-                current_word = utils.strip_tags(tds[0])
+                current_word = sztakiutils.strip_tags(tds[0])
                 if current_word == "":
                     continue;
-                meaning = utils.strip_tags(tds[1])
+                meaning = sztakiutils.strip_tags(tds[1])
                 if meaning == "":
                     continue;
                 if result.has_key(current_word):
@@ -99,7 +99,7 @@ def translate(form_data):
             # egyebkent csak hozzaadjuk az aktualis szo jelenteseihez
             else:
                 td = result_row.find(name = "td")
-                meaning = utils.strip_tags(td)
+                meaning = sztakiutils.strip_tags(td)
                 if meaning == "":
                     continue;
                 result[current_word].append(meaning)
@@ -115,7 +115,7 @@ if __name__ == '__main__':
         sys.stderr.write(u"Helytelen paraméterezés!\n".encode(encoding))
     
     # az elso parameter alapesetben a nyelv, a tobbi a szo
-    args = utils.decode_list(sys.argv, encoding)
+    args = sztakiutils.decode_list(sys.argv, encoding)
     dict_id = args[1]
     word = u" ".join(args[2:])
 
