@@ -1,29 +1,29 @@
 # -*- encoding: utf-8 -*-
 
-# A sztaki kereso-urlje
+# SZTAKI URL
 base_url = u"http://szotar.sztaki.hu/dict_search.php"
 
-# ismeretlen celu form-parameterek
+# Unknown form-parameters
 form_data = {
     u'flash':   u"",
     u'E':       u"1",
     u'in_form': u"1",
 
-# ismert form-parameterek
-    u'L':      u"ENG:HUN:EngHunDict",   # nyelv
-    u'M':      u"1",                    # egyezes
-                                        # 2 - barmilyen
-                                        # 1 - szoeleji
-                                        # 0 - csak teljes szavak
-                                        # 3 - teljes egyezes
-    u'C':      u"0",                    # kis-nagybetu nem szamit
-    u'A':      u"0",                    # ekezet nem szamit 
+# Known form-parameters
+    u'L':      u"ENG:HUN:EngHunDict",   # default dictionary
+    u'M':      u"1",                    # match
+                                        # 2 - any
+                                        # 1 - word prefix
+                                        # 0 - whole word
+                                        # 3 - full match
+    u'C':      u"0",                    # ignore case
+    u'A':      u"0",                    # ignore accents
 }
 
 
 
-# A tovabbi beallitasokat csak akkor modositsd, ha jol tudod, mit csinalsz
-# megfeleltetesek a sztaki-s es a parancssori jelolesek kozott
+# normally, you shouldn't modify these
+# command line -> sztaki notation
 dict_ids = {
     u'enhu':    u"ENG:HUN:EngHunDict",
     u'huen':    u"HUN:ENG:EngHunDict",
@@ -39,13 +39,13 @@ dict_ids = {
     u'hupo':    u"HUN:POL:PolHunDict",
 }
 
-# Sztaki form-valtozok
+# Sztaki form parameters
 word_param = u"W"
 
-# Sztaki parameterek, amelyek megvaltoztatasa esetleg a python kod valtoztatasat igenylik
+# Form values which the script depends on
 form_data.update({
-    u'P':               u"0",    # kiejtes nelkul
-    u'T':               u"1",    # tablazatos megjelenites
-    u'hallatlan_inc':   u"0",    # jelbeszed megjelenitese
-    u'in_pysztaki':     u"1",    # bejelezzuk, hogy a mi programunk generalt
+    u'P':               u"0",    # no pronounciation
+    u'T':               u"1",    # use tables
+    u'hallatlan_inc':   u"0",    # no sign language
+    u'in_pysztaki':     u"1",    # for sztaki
 })

@@ -3,16 +3,17 @@
 
 """
 PySztaki
-Konzolos fordito-script a sztaki adatbazis hasznalataval
+Translator script for console using the szotar.sztaki.hu database
 
-Egyszeru script, mely a parameterkent kapott szot megkeresi
-a szinten parameterkent kapott sztaki szotar-valtozatban a
-szotar.sztaki.hu-n, majd BeautifulSouppal benyalja az oldalt,
-es kiszedi a talalatokat. A script translate() fuggvenye vegzi
-a tenyleges forditast, konnyen felhasznalhato mas projectben is.
+A really short script, which uses the given dictionary (in first
+parameter) to translate a word or an expression. It uses web-based
+translator of szotar.sztaki.hu (parsed with BeautifulSoup
+http://www.crummy.com/software/BeautifulSoup/). The translate()
+function contains the actual translation code, it can be simply
+reused.
 
-Tovabbi informacio a project honlapjan:
-http://code.google.com/p/pysztaki/
+Script home:
+http://pysztaki.googlecode.com/
 
 Copyright (c) 2008, Pek Daniel
 
@@ -50,6 +51,10 @@ import urllib
 import sztakiutils
 
 def print_results(results):
+    """
+    Prints the results with preferred encoding from
+    locale.
+    """
     import locale
     
     encoding = locale.getpreferredencoding()
@@ -59,31 +64,30 @@ def print_results(results):
 
 def translate(form_data):
     """
-    Ez a fuggveny vegzi a kapott form-adatok alapjan a lekerdezest.
-    A visszaadott ertek egy multidict, ami tartalmazza az egyes szavak
-    jelenteseit, mint egyszeru list objektumokat.
+    This function runs the actual query by sending the form in GET.
+    Return value is an ordered dictionary which have lists as values
+    in it, like {"word": ["tranlation1", "translation2", ...], ...} 
     """
     
-    # parameterek rekombinalasa, eredmeny letoltese
+    # compose GET line, download result page
     params = urllib.urlencode(sztakiutils.encode_dict(form_data, "iso8859-2"))
     page = urllib.urlopen(sztakiconfig.base_url + "?%s" % params)
     
-    # az eredmenyt benyaljuk beautifulsouppal
-    # hasznalunk egy util-fuggvenyt, ami lenyeli a whitespace-eket
+    # parse the result page with BeautifulSoup 
     soup = sztakiutils.bs_preprocess(page)
     
-    # adatok kinyerese
+    # Here starts the processing of soup tree 
     result = sztakiutils.odict()
     current_word = ""
     
-    # eredmenytablak megkeresese, vegigiteralunk rajtuk
+    # get result <table>s, iterate
     result_tables = soup.findAll(name = "table", attrs = { 'class': 'results' })
     for result_table in result_tables:
-        # megkeressuk az osszes sort, vegigmegyunk rajtuk
+        # find <tr>s, iterate
         result_rows = result_table.findAll(name = "tr")
         for result_row in result_rows:
-            # ha mainrow, akkor letrehozunk egy uj dict-keyt neki, es betesszuk
-            # az elso jelentest a tombjebe
+            # in case of mainrow, maybe we should create a new key
+            # put first meaning into the list
             if result_row['id'][:4] == "main":
                 tds = result_row.findAll(name = "td")
                 current_word = sztakiutils.strip_tags(tds[0])
@@ -96,7 +100,7 @@ def translate(form_data):
                     result[current_word].append(meaning)
                 else:
                     result[current_word] = [meaning]
-            # egyebkent csak hozzaadjuk az aktualis szo jelenteseihez
+            # we just put the new meaning into the list
             else:
                 td = result_row.find(name = "td")
                 meaning = sztakiutils.strip_tags(td)
@@ -107,25 +111,25 @@ def translate(form_data):
     return result
 
 if __name__ == '__main__':
-    # parameterek parseolasa, config-fajl feldolgozasa
+    # pasrsing parameters, processing configfile
     import locale
     
     encoding = locale.getpreferredencoding()
     if len(sys.argv) < 2:
-        sys.stderr.write(u"Helytelen paraméterezés!\n".encode(encoding))
+        sys.stderr.write(u"You should give at least one parameter!\n".encode(encoding))
         sys.exit(-1)
     
-    # az elso parameter alapesetben a nyelv, a tobbi a szo
+    # first parameter in default case is the dictionary, everything else
+    # will be treated as part of the expression we would like to translate
     args = sztakiutils.decode_list(sys.argv, encoding)
     dict_id = args[1]
     word = u" ".join(args[2:])
 
-    # form alapertekek kinyerese a config-fajlbol
+    # form defaults from configfile
     form_data = sztakiconfig.form_data
     
-    # ha letezik a megadott nyelv-azonosito, akkor hasznaljuk,
-    # ha nem, akkor default ertekkel dolgozunk, es hozzafuzzuk
-    # az elso parametert is a forditando szohoz
+    # if given dictionary exists, we use it
+    # else, we concat to the beginning of the expression
     if sztakiconfig.dict_ids.has_key(dict_id):
         form_data['L'] = sztakiconfig.dict_ids[dict_id]
     else:
@@ -133,7 +137,7 @@ if __name__ == '__main__':
     
     form_data[sztakiconfig.word_param] = word
     
-    # translate fuggveny meghivasa
+    # call translate()
     result = translate(form_data)
     
     print_results(result)
