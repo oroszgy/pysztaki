@@ -52,9 +52,9 @@ import sztakiutils
 def print_results(results):
     import locale
     
-    encoding = locale.getpreferredencoding(True)
+    encoding = locale.getpreferredencoding()
     for word in results.keys():
-        line = (word + u": " + u"; ".join(results[word])).encode(encoding)
+        line = (word + u": " + u"; ".join(results[word])).encode(encoding, "replace")
         print line
 
 def translate(form_data):
@@ -110,7 +110,7 @@ if __name__ == '__main__':
     # parameterek parseolasa, config-fajl feldolgozasa
     import locale
     
-    encoding = locale.getpreferredencoding(True)
+    encoding = locale.getpreferredencoding()
     if len(sys.argv) < 2:
         sys.stderr.write(u"Helytelen paraméterezés!\n".encode(encoding))
         sys.exit(-1)
