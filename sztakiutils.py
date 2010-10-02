@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- encoding: iso8859-2 -*-
 
 import BeautifulSoup as bs
 import re
@@ -6,14 +6,16 @@ from UserDict import IterableUserDict
 
 def bs_preprocess(file):
     """remove distracting whitespaces and newline characters"""
-#    html = file.read()
+    html = file.read()
 #    pat = re.compile('[\s]+', re.MULTILINE)
 #    html = re.sub('\n', ' ', html)     # convert newlines to spaces
 #    html = re.sub(pat, ' ', html)       # remove leading and trailing whitespaces
 #    html = re.sub('[\s]+<([^uib])', '<$1', html) # remove whitespaces before opening tags
 #    html = re.sub('([^uib])>[\s]+', '$1>', html) # remove whitespaces after closing tags
-    
-    return bs.BeautifulSoup(file, convertEntities = bs.BeautifulStoneSoup.HTML_ENTITIES)
+
+    html = re.sub('Medián WebAudit SZTAKI szótár Angol-magyar szótár', ' ', html)
+
+    return bs.BeautifulSoup(unicode(html, "utf-8"), convertEntities = bs.BeautifulStoneSoup.HTML_ENTITIES)
 
 def strip_tags(tag, recursive = False):
     """
