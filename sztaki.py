@@ -45,10 +45,9 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import sztakiconfig
 import sys
+from pysztaki import sztakiutils, sztakiconfig
 import urllib
-import sztakiutils
 
 def print_results(results):
     """
