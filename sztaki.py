@@ -78,7 +78,6 @@ class SztakiQueryParser:
     
     def query(self, word):
         url = self.build_query(word)
-        print(url)
         of = urlopen(url)
         return self.parse_html(of)
     
