@@ -32,7 +32,7 @@ feedback, bugreport would be welcomed.
 ## Usage
 
 
-    pysztaki.py [from_lang] [to_lang] <word/expression>
+    pysztaki.py <word/expression> [from_lang] [to_lang] 
 
 Available languages
 * eng
