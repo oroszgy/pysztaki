@@ -89,7 +89,7 @@ def main(word, from_lang, to_lang):
     
 
 if __name__ == "__main__":
-    parser = ArgumentParser("sztaki2.py", description="Console interface for Sztaki dictionaries.")
+    parser = ArgumentParser("sztaki.py", description="Console interface for Sztaki dictionaries.")
     parser.add_argument("word")
     parser.add_argument("from_lang", default="eng", nargs="?")
     parser.add_argument("to_lang", default="hun", nargs="?")
