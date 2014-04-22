@@ -55,7 +55,7 @@ class SztakiQueryParser:
         self._to = to_lang
         
     def build_query(self,word):
-        return "{}?{}={}&{}={}&{}={}".format(self._base_url, _from, self._from, _to, self._to, _word, quote(word))
+        return "{}?{}={}&{}={}&{}={}&in_pysztaki=1".format(self._base_url, _from, self._from, _to, self._to, _word, quote(word))
     
     def parse_html(self, res_file):
         content =  res_file.read().decode("utf8")
