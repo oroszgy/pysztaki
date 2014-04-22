@@ -38,6 +38,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 from urllib.request import urlopen
+from urllib.parse import quote
 from bs4 import BeautifulSoup as bs
 from argparse import ArgumentParser
 from collections import OrderedDict
@@ -54,7 +55,7 @@ class SztakiQueryParser:
         self._to = to_lang
         
     def build_query(self,word):
-        return "{}?{}={}&{}={}&{}={}".format(self._base_url, _from, self._from, _to, self._to, _word, word)
+        return "{}?{}={}&{}={}&{}={}".format(self._base_url, _from, self._from, _to, self._to, _word, quote(word))
     
     def parse_html(self, res_file):
         content =  res_file.read().decode("utf8")
@@ -73,10 +74,11 @@ class SztakiQueryParser:
     
     def parse_article(self, div):
         act = div.find("ol")
-        return [e.text.strip() for e in act.findAll("div", {"class":"translation"}) if not e.find("span", {"class":"type_text"})]
+        return [e.find("a").text.strip() for e in act.findAll("div", {"class":"translation"}) if not e.find("span", {"class":"type_text"})]
     
     def query(self, word):
         url = self.build_query(word)
+        print(url)
         of = urlopen(url)
         return self.parse_html(of)
     
