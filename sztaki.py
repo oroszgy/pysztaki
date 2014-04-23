@@ -37,63 +37,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """
 
-from urllib.request import urlopen
-from urllib.parse import quote
-from bs4 import BeautifulSoup as bs
 from argparse import ArgumentParser
-from collections import OrderedDict
-
-_base_url="http://szotar.sztaki.hu/search"
-_from = "fromlang"
-_to = "tolang"
-_word = "searchWord"
-
-class SztakiQueryParser:
-    def __init__(self, base_url, from_lang, to_lang):
-        self._base_url = base_url
-        self._from = from_lang
-        self._to = to_lang
-        
-    def build_query(self,word):
-        return "{}?{}={}&{}={}&{}={}&in_pysztaki=1".format(self._base_url, _from, self._from, _to, self._to, _word, quote(word))
-    
-    def parse_html(self, res_file):
-        content =  res_file.read().decode("utf8")
-        soup = bs(content)
-            
-        ret = OrderedDict()
-        for res in soup.findAll("div", { "class":"articlewrapper"}):
-            head = self.parse_head(res)
-            article = self.parse_article(res)
-            ret[head]= article
-            
-        return ret
-    
-    def parse_head(self, div):
-        return div.find("span", {"class":"prop_content"}).string.strip()
-    
-    def parse_article(self, div):
-        act = div.find("ol")
-        return [e.find("a").text.strip() for e in act.findAll("div", {"class":"translation"}) if not e.find("span", {"class":"type_text"})]
-    
-    def query(self, word):
-        url = self.build_query(word)
-        of = urlopen(url)
-        return self.parse_html(of)
-    
+from pysztaki.queryparser import SztakiQueryParser
+from pysztaki.config import BASE_URL, Languages
 
 def main(word, from_lang, to_lang):
-    sztakker = SztakiQueryParser(_base_url, from_lang, to_lang)
+    sztakker = SztakiQueryParser(from_lang, to_lang)
     for k,v in sztakker.query(word).items():
         print(k+":")
-        print("\t", ", ".join(v))
+        print("\t" + "\n\t".join(v) + "\n")
     
 
 if __name__ == "__main__":
     parser = ArgumentParser("sztaki.py", description="Console interface for Sztaki dictionaries.")
     parser.add_argument("word")
-    parser.add_argument("from_lang", default="eng", nargs="?")
-    parser.add_argument("to_lang", default="hun", nargs="?")
+    parser.add_argument("from_lang", default=Languages.English, nargs="?")
+    parser.add_argument("to_lang", default=Languages.Hungarian, nargs="?")
     
     args = parser.parse_args()
     main(args.word, args.from_lang, args.to_lang)
