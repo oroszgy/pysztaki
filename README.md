@@ -15,7 +15,8 @@ reused.
 * http://pysztaki.googlecode.com/
 * https://github.com/oroszgy/pysztaki
 
-Copyright (c) 2008, Pek Daniel </br>
+Copyright (c) 2008, Pek Daniel
+
 Copyright (c) 2014, György Orosz
 
 ## Requirements
