@@ -41,20 +41,19 @@ from argparse import ArgumentParser
 from pysztaki.queryparser import SztakiQueryParser
 from pysztaki.config import BASE_URL, Languages
 
+
 def main(word, from_lang, to_lang):
     sztakker = SztakiQueryParser(from_lang, to_lang)
-    for k,v in sztakker.query(word).items():
+    for k, v in sztakker.query(word).items():
         print(k+":")
         print("\t" + "\n\t".join(v) + "\n")
-    
 
 if __name__ == "__main__":
-    parser = ArgumentParser("sztaki.py", description="Console interface for Sztaki dictionaries.")
+    parser = ArgumentParser("sztaki.py",
+                            description="Console interface for Sztaki dictionaries.")
     parser.add_argument("word")
     parser.add_argument("from_lang", default=Languages.English, nargs="?")
     parser.add_argument("to_lang", default=Languages.Hungarian, nargs="?")
-    
+
     args = parser.parse_args()
     main(args.word, args.from_lang, args.to_lang)
-    
-    
