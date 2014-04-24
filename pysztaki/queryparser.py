@@ -26,7 +26,7 @@ class SztakiQueryParser:
         for res in soup.findAll("div", {"class": "articlewrapper"}):
             head = self.parse_head(res)
             article = self.parse_article(res)
-            ret[head]=article
+            ret[head] = article
 
         return ret
 
